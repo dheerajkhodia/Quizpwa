@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="hi" class="dark-theme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Rajasthan GK Immersive</title>
+  <meta name="description" content="A next-generation offline-ready Quiz Progressive Web App for Rajasthan GK.">
+  <meta name="theme-color" content="#0f172a">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+
+  <!-- Inter and Noto Sans Devanagari -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'Noto Sans Devanagari', 'sans-serif'],
+            space: ['Space Grotesk', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Mesh Gradient Background & Overlay -->
+  <div class="mesh-bg">
+    <div class="mesh-blob blob-1"></div>
+    <div class="mesh-blob blob-2"></div>
+    <div class="mesh-blob blob-3"></div>
+  </div>
+  <div class="grain-overlay"></div>
+
+  <!-- Ambient Light Header Glow -->
+  <div class="ambient-glow top-glow"></div>
+
+  <!-- LOADING SCREEN -->
+  <div id="loading-screen" class="screen flex-center glass-panel active-screen">
+    <div class="loader-wrap pulse-anim">
+      <div class="cyber-spinner">
+        <svg viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="45" fill="none" class="spinner-track" stroke-width="4"></circle>
+          <circle cx="50" cy="50" r="45" fill="none" class="spinner-head" stroke-width="4" stroke-dasharray="280"></circle>
+        </svg>
+      </div>
+      <h2 class="mt-6 font-space text-2xl font-bold text-white tracking-widest uppercase">Initializing</h2>
+      <p class="text-indigo-300 tracking-wide mt-2">Loading Core Syllabi...</p>
+    </div>
+  </div>
+
+  <!-- ERROR SCREEN -->
+  <div id="error-screen" class="screen flex-center hidden">
+    <div class="glass-card max-w-sm text-center p-8 z-10">
+      <div class="text-rose-500 mb-4 scale-up-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="mx-auto drop-shadow-[0_0_15px_rgba(244,63,94,0.5)]"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+      </div>
+      <h2 class="text-2xl font-bold text-white mb-2 font-space">System Offline</h2>
+      <p id="error-message" class="text-slate-400 mb-8">Data sync failed. Check your neural connection (or WiFi) and retry.</p>
+      <button id="retry-btn" class="cyber-btn w-full"><span>Re-establish Uplink</span><div class="btn-glow"></div></button>
+    </div>
+  </div>
+
+  <!-- DASHBOARD SCREEN -->
+  <div id="dashboard-screen" class="screen hidden">
+    <header class="app-header z-20 sticky top-0 backdrop-blur-md border-b border-white/5 bg-slate-900/40">
+      <div class="container py-4 flex items-center justify-between">
+        <div class="brand">
+          <h1 id="app-title" class="text-2xl font-space font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-fuchsia-400 to-rose-400">RAJ.GK_OS</h1>
+          <p class="text-xs text-indigo-300/80 uppercase tracking-[0.2em]" id="app-source">Initializing source</p>
+        </div>
+        <div class="user-avatar h-10 w-10 rounded-xl bg-gradient-to-br from-indigo-500 rounded to-purple-600 flex items-center justify-center shadow-[0_0_15px_rgba(99,102,241,0.5)] border border-white/10">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+      </div>
+    </header>
+    
+    <main class="dashboard-main container pt-6 pb-24 z-10 relative">
+      
+      <!-- Premium Stats Banner -->
+      <div class="stats-showcase glass-card p-6 mb-8 rounded-[2rem] relative overflow-hidden group">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-indigo-500/20 rounded-full blur-[50px] -translate-y-1/2 translate-x-1/3 group-hover:bg-fuchsia-500/20 transition-colors duration-1000"></div>
+        <h2 class="text-sm uppercase tracking-widest text-slate-400 mb-6 font-semibold flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          Current Database
+        </h2>
+        <div class="flex items-end justify-between">
+          <div>
+            <div class="flex items-baseline gap-2">
+              <span class="text-5xl font-space font-black text-white drop-shadow-md" id="stat-topics">0</span>
+              <span class="text-lg text-indigo-300 font-medium">Modules</span>
+            </div>
+          </div>
+          <div class="text-right">
+            <div class="text-3xl font-space font-bold text-white" id="stat-questions">0</div>
+            <div class="text-sm text-slate-400">Total Datapoints</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-xl font-space font-bold text-white flex items-center gap-3">
+          <div class="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)] animate-pulse"></div>
+          Select Simulation
+        </h2>
+      </div>
+      
+      <div id="topics-list" class="topics-grid grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Topic cards injected via JS -->
+      </div>
+    </main>
+  </div>
+
+  <!-- QUIZ SCREEN -->
+  <div id="quiz-screen" class="screen hidden flex-col">
+    <header class="quiz-header z-30 fixed top-0 w-full bg-slate-900/80 backdrop-blur-xl border-b border-white/5 pt-safe">
+      <div class="container py-3 flex items-center justify-between">
+        <button id="back-to-dash-btn" class="nav-icon-btn rounded-xl bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 hover:text-white transition-all h-10 w-10 flex-center">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        
+        <div class="text-center truncate px-4 flex-1">
+          <div class="text-xs font-space font-bold uppercase tracking-widest text-indigo-400 mb-0.5">Active Session</div>
+          <div class="text-sm font-semibold text-white truncate" id="current-topic-title">Topic Name</div>
+        </div>
+
+        <div class="timer-pill h-10 px-3 bg-slate-800/80 border border-slate-700/50 rounded-xl flex items-center gap-2 font-space text-sm font-bold shadow-inner">
+          <div class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></div>
+          <span id="quiz-timer" class="text-rose-100">00:00</span>
+        </div>
+      </div>
+      
+      <!-- Immersive Progress Bar -->
+      <div class="w-full h-1.5 bg-slate-800 relative overflow-hidden">
+        <div id="progress-bar-fill" class="absolute top-0 left-0 h-full bg-gradient-to-r from-indigo-500 via-fuchsia-500 to-rose-500 transition-all duration-500 ease-out w-0 shadow-[0_0_10px_rgba(236,72,153,0.8)]"></div>
+        <div class="absolute top-0 right-0 h-full w-20 bg-gradient-to-l from-white/20 to-transparent animate-shimmer"></div>
+      </div>
+    </header>
+
+    <main class="quiz-main container flex-1 pt-28 pb-32 z-10 relative overflow-y-auto">
+      
+      <div class="mb-4 flex justify-between items-end">
+        <div class="text-7xl font-space font-black text-white/5 tracking-tighter" style="line-height: 0.8;" id="progress-text-bg">01</div>
+        <div class="text-sm font-space font-bold text-indigo-300 uppercase tracking-widest" id="progress-text">1 / 10</div>
+      </div>
+
+      <div class="question-wrapper mb-8">
+        <h3 id="question-text" class="text-2xl md:text-3xl font-semibold text-white leading-tight">Question goes here...</h3>
+      </div>
+
+      <div id="options-container" class="options-container flex flex-col gap-3">
+        <!-- Options injected via JS -->
+      </div>
+
+      <div id="explanation-container" class="explanation-card hidden mt-6 rounded-2xl bg-indigo-900/20 border border-indigo-500/30 overflow-hidden backdrop-blur-md">
+        <div class="p-5 border-l-4 border-indigo-500">
+          <div class="flex items-center gap-2 mb-2 text-indigo-400">
+             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+             <h4 class="text-xs font-bold font-space uppercase tracking-widest">Ai Analysis</h4>
+          </div>
+          <p id="explanation-text" class="text-[0.95rem] text-slate-200 leading-relaxed mb-3">Explanation goes here...</p>
+          <div class="inline-flex bg-slate-900/50 rounded-lg px-2.5 py-1 text-xs text-slate-400 border border-white/5 items-center gap-1.5">
+             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+             <span id="exam-source">Source</span>
+          </div>
+        </div>
+      </div>
+      
+    </main>
+
+    <footer class="quiz-footer fixed bottom-0 left-0 w-full z-30 p-4 bg-gradient-to-t from-slate-900 via-slate-900/90 to-transparent pt-10 pb-safe">
+      <div class="container relative">
+        <button id="next-question-btn" class="cyber-btn w-full hidden overflow-hidden group">
+          <span class="flex items-center justify-center gap-2 relative z-10 w-full">
+            Proceed to Next
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" class="group-hover:translate-x-1 transition-transform" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </span>
+          <div class="btn-glow"></div>
+        </button>
+      </div>
+    </footer>
+  </div>
+
+  <!-- RESULT SCREEN -->
+  <div id="result-screen" class="screen hidden overflow-y-auto pb-10 z-20">
+    <div class="ambient-glow center-glow"></div>
+    <div class="container pt-12 relative z-10">
+      
+      <div class="text-center mb-8 animate-slide-up">
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-600 mb-4 shadow-[0_0_30px_rgba(52,211,153,0.4)]">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="m9 12 2 2 4-4"/></svg>
+        </div>
+        <h2 class="text-3xl font-space font-black text-white mb-1 tracking-tight">Mission Complete</h2>
+        <p id="result-topic" class="text-indigo-300 font-medium">Topic Name</p>
+      </div>
+      
+      <div class="glass-card p-6 mb-8 rounded-[2rem] text-center animate-slide-up" style="animation-delay: 0.1s;">
+        <div class="score-ring-container mx-auto mb-6 relative w-48 h-48 flex-center">
+          <svg class="w-full h-full transform -rotate-90 absolute top-0 left-0 drop-shadow-[0_0_15px_rgba(99,102,241,0.5)]" viewBox="0 0 36 36">
+             <!-- Background Track -->
+             <path class="text-slate-800/50 stroke-current" stroke-width="2.5" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" stroke-linecap="round" />
+             <!-- Progress Fill -->
+             <path id="score-ring-path" class="text-indigo-500 stroke-current transition-all duration-[1500ms] ease-out" stroke-width="2.5" stroke-dasharray="0, 100" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" stroke-linecap="round" />
+          </svg>
+          <div class="relative z-10 flex flex-col items-center">
+             <span class="text-5xl font-space font-black text-white drop-shadow-lg" id="final-percentage">0<span class="text-2xl text-slate-400">%</span></span>
+             <span class="text-sm font-semibold text-slate-400 mt-1 tracking-widest uppercase">Accuracy</span>
+          </div>
+        </div>
+        
+        <div class="flex flex-wrap justify-center gap-3">
+           <div class="px-4 py-2 rounded-xl bg-slate-800/50 border border-white/10 flex items-center gap-2">
+             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+             <span id="final-time" class="font-space font-bold text-white tracking-widest">00:00</span>
+           </div>
+           <div class="px-4 py-2 rounded-xl bg-slate-800/50 border border-white/10 flex items-center gap-2">
+             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+             <span class="font-space font-bold text-white tracking-widest"><span id="final-correct">0</span> / <span id="final-score-total">0</span></span>
+           </div>
+        </div>
+      </div>
+      
+      <div class="grid grid-cols-2 gap-3 mb-8 animate-slide-up" style="animation-delay: 0.2s;">
+        <button id="retake-btn" class="glass-btn w-full">Terminal Reboot</button>
+        <button id="dashboard-return-btn" class="glass-btn w-full">Access Hub</button>
+        <button id="share-score-btn" class="cyber-btn col-span-2 w-full mt-2">
+          <span class="flex items-center justify-center gap-2 relative z-10">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+            Broadcast Result
+          </span>
+          <div class="btn-glow"></div>
+        </button>
+      </div>
+
+      <div class="review-section animate-slide-up" style="animation-delay: 0.3s;">
+        <h3 class="text-sm font-space font-bold uppercase tracking-widest text-slate-400 mb-4 flex items-center gap-2">
+          <div class="w-1 h-4 bg-indigo-500 rounded-full"></div>
+          Post-Mission Analysis
+        </h3>
+        <div id="review-list" class="flex flex-col gap-3">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Confetti Canvas -->
+  <canvas id="confetti-canvas" class="fixed top-0 left-0 w-full h-full z-[100] pointer-events-none"></canvas>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
