@@ -173,3 +173,10 @@ body {
 /* Explanations */
 .explanation-card { transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); max-height: 800px; opacity: 1; transform: translateY(0); margin-top: 1.5rem; }
 .explanation-card.hidden { max-height: 0; opacity: 0; transform: translateY(-20px); margin-top: 0; border: none; }
+
+/* Safe Area Insets for Mobile PWAs */
+.pt-safe { padding-top: max(env(safe-area-inset-top), 1rem); }
+.pb-safe { padding-bottom: max(env(safe-area-inset-bottom), 1.5rem); }
+.pl-safe { padding-left: max(env(safe-area-inset-left), 1rem); }
+.pr-safe { padding-right: max(env(safe-area-inset-right), 1rem); }
+
